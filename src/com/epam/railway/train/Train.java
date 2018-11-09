@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Train extends RailwayTransport {
-    private List<Locomotive> locomotives = new ArrayList<>();
+    private Locomotive locomotive;
     private List<Carriage> carriages = new ArrayList<>();
     private float maxWeightCapacity;
     private int maxCarriageCount;
@@ -18,22 +18,30 @@ public class Train extends RailwayTransport {
     }
 
     public Train(Locomotive locomotive) {
-        addLocomotive(locomotive);
+        setLocomotive(locomotive);
     }
 
-    public void addLocomotive(Locomotive locomotive) {
-        if (locomotives.isEmpty()) {
-            this.setPassenger(locomotive.isPassenger());
-            locomotives.add(locomotive);
-            maxWeightCapacity = locomotive.getLoadCapacity();
-            decreaseMaxWeightCapacity(locomotive);
-        } else if (this.isPassenger() == locomotive.isPassenger()) {
-            locomotives.add(locomotive);
-            maxWeightCapacity += locomotive.getLoadCapacity();
-            decreaseMaxWeightCapacity(locomotive);
-        } else {
-            System.out.println("You can not add this type of locomotive!");
-        }
+    public Locomotive getLocomotive() {
+        return locomotive;
+    }
+
+    public List<Carriage> getCarriages() {
+        return carriages;
+    }
+
+    public float getMaxWeightCapacity() {
+        return maxWeightCapacity;
+    }
+
+    public int getMaxCarriageCount() {
+        return maxCarriageCount;
+    }
+
+    public void setLocomotive(Locomotive locomotive) {
+        this.locomotive = locomotive;
+        this.setPassenger(locomotive.isPassenger());
+        maxWeightCapacity = locomotive.getLoadCapacity();
+        decreaseMaxWeightCapacity(locomotive);
     }
 
     public void addCarriage(Carriage carriage) {

@@ -1,55 +1,57 @@
 package com.epam.railway;
 
-import com.epam.railway.carriage.cargo.CisternCarriage;
-import com.epam.railway.carriage.cargo.CoveredCarriage;
-import com.epam.railway.carriage.passenger.human.CoupeCarriage;
-import com.epam.railway.carriage.passenger.human.EconomClassCarriage;
-import com.epam.railway.carriage.passenger.special.MailCarriage;
-import com.epam.railway.locomotive.ElectricLocomotive;
+import com.epam.railway.carriage.CargoCarriage;
+import com.epam.railway.carriage.PassengerCarriage;
+import com.epam.railway.carriage.TypeOfCargoCarriage;
+import com.epam.railway.carriage.TypeOfPassengerCarriage;
+import com.epam.railway.locomotive.Locomotive;
+import com.epam.railway.locomotive.TypeOfLocomotive;
 import com.epam.railway.train.Train;
+
+import java.util.Scanner;
 
 public class TrainFormation {
 
-    public void generatePassengerTrain() {
+    private void generatePassengerTrain() {
         System.out.println("Process of formation passenger train!");
         Train myPassengerTrain = new Train();
-        myPassengerTrain.addLocomotive(new ElectricLocomotive(2.76f, 401f, true));
-        for (int i = 0; i < 29; i++) {
-            myPassengerTrain.addCarriage(new EconomClassCarriage(6f));
+        boolean isPassenger = true;
+        myPassengerTrain.setLocomotive(new Locomotive( 2.76f, 401f, isPassenger));
+        myPassengerTrain.getLocomotive().setTypeOfLocomotive(TypeOfLocomotive.ELECTRIC_LOCOMOTIVE);
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("How many passenger carriages do you want to add?");
+        int countOfPassCarriages = scanner.nextInt();
+        for (int i = 0; i < countOfPassCarriages; i++) {
+            myPassengerTrain.addCarriage(new PassengerCarriage(6f));
         }
-        for (int i = 0; i < 4; i++) {
-            myPassengerTrain.addCarriage(new MailCarriage(12f));
+        System.out.println("How many mail carriages do you want to add?");
+        int countOfMailCarriages = scanner.nextInt();
+        for (int i = 0; i < countOfMailCarriages; i++) {
+            myPassengerTrain.addCarriage(new PassengerCarriage(TypeOfPassengerCarriage.MAIL_CARRIAGE, 12f));
         }
 
         // Tries to add not passenger carriage
-        myPassengerTrain.addCarriage(new CoveredCarriage(24f));
-
-        // Tries to add not passenger locomotive
-        myPassengerTrain.addLocomotive(new ElectricLocomotive(2.76f, 401f, false));
+        System.out.println("Process of adding cargo carriage to passenger train:");
+        myPassengerTrain.addCarriage(new CargoCarriage(TypeOfCargoCarriage.OPEN_CARRIAGE,24f));
 
         System.out.println("Count of carriage in passenger train: " + myPassengerTrain.countCarriages());
     }
 
-    public void generateCargoTrain() {
+    private void generateCargoTrain() {
         System.out.println("Process of formation cargo train!");
-
-        Train myCargoTrain = new Train();
-        myCargoTrain.addLocomotive(new ElectricLocomotive(2.76f, 401f, false));
-        for (int i = 0; i < 10; i++) {
-            myCargoTrain.addCarriage(new CoveredCarriage(24f));
+        boolean isPassenger = false;
+        Train myCargoTrain = new Train(new Locomotive(2.76f, 401f, isPassenger));
+        myCargoTrain.getLocomotive().setTypeOfLocomotive(TypeOfLocomotive.ELECTRIC_LOCOMOTIVE);
+        Scanner scanner = new Scanner(System.in);
+        System.out.println("How many cargo carriages do you want to add?");
+        int countOfCargoCarriages = scanner.nextInt();
+        for (int i = 0; i < countOfCargoCarriages; i++) {
+            myCargoTrain.addCarriage(new CargoCarriage(24f));
         }
-        for (int i = 0; i < 10; i++) {
-            myCargoTrain.addCarriage(new CisternCarriage(26f));
-        }
-
-        System.out.println("Count of carriage in cargo train: " + myCargoTrain.countCarriages());
 
         // Tries to add passenger carriage
-        myCargoTrain.addCarriage(new CoupeCarriage(4f));
-        myCargoTrain.addLocomotive(new ElectricLocomotive(2.76f, 401f, false));
-        for (int i = 0; i < 10; i++) {
-            myCargoTrain.addCarriage(new CisternCarriage(26f));
-        }
+        System.out.println("Process of adding passenger carriage to cargo train:");
+        myCargoTrain.addCarriage(new PassengerCarriage(4f));
 
         System.out.println("Count of carriage in cargo train: " + myCargoTrain.countCarriages());
     }
@@ -57,6 +59,7 @@ public class TrainFormation {
     public static void main(String[] args) {
         TrainFormation trainFormation = new TrainFormation();
         trainFormation.generatePassengerTrain();
+        System.out.println();
         trainFormation.generateCargoTrain();
     }
 }

@@ -4,11 +4,12 @@ import java.util.*;
 
 public class Employee {
     private static int counter = 1;
+    private static Map<Integer, Employee> employees = new HashMap<>();
+
     private int id;
     private int parentId;
     private String name;
     private Set<Employee> children = new HashSet<>();
-    private static Map<Integer, Employee> employees = new HashMap<>();
 
     public Employee(String name) {
         this.id = createID();
